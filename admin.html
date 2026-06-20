@@ -303,6 +303,13 @@ function p1LinkGoogleCalendar({ nombre, fecha, hora, personas }) {
   document.getElementById('mananaBtn').addEventListener('click', () => { fechaPanel.value = tomorrowStr(); pintarTodo(); });
   fechaPanel.addEventListener('change', pintarTodo);
 
+  // Si el navegador restaura la página desde su caché (al volver con "atrás"),
+  // nos aseguramos de que la fecha y la lista estén siempre actualizadas.
+  window.addEventListener('pageshow', () => {
+    if (!fechaPanel.value) fechaPanel.value = todayStr;
+    if (sessionStorage.getItem('p1_admin') === '1') pintarTodo();
+  });
+
   // ---------- Pintar aforo por turno ----------
   function pintarAforo(fecha) {
     const grid = document.getElementById('aforoGrid');
