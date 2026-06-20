@@ -425,6 +425,13 @@
       </div>
 
       <div>
+        <label for="email" class="block text-xs eyebrow uppercase text-mute mb-2">Correo electrónico</label>
+        <input type="email" id="email" name="email" placeholder="tucorreo@email.com"
+          class="field-input w-full bg-ink/60 border border-line rounded-lg px-4 py-3.5 text-cream placeholder:text-mute/60">
+        <p class="error-msg hidden text-red-400 text-xs mt-1.5"></p>
+      </div>
+
+      <div>
         <label for="personas" class="block text-xs eyebrow uppercase text-mute mb-2">Número de personas</label>
         <select id="personas" name="personas"
           class="field-input w-full bg-ink/60 border border-line rounded-lg px-4 py-3.5 text-cream">
@@ -589,7 +596,7 @@ function p1SlotsConDisponibilidad(fecha) {
 }
 
 // Crea una reserva. Devuelve { ok: true, reserva } o { ok: false, motivo }
-function p1CrearReserva({ nombre, telefono, fecha, hora, personas }) {
+function p1CrearReserva({ nombre, telefono, email, fecha, hora, personas }) {
   if (p1LibresEnSlot(fecha, hora) <= 0) {
     return { ok: false, motivo: 'Ese turno se ha completado mientras rellenabas el formulario. Elige otra hora.' };
   }
@@ -597,6 +604,7 @@ function p1CrearReserva({ nombre, telefono, fecha, hora, personas }) {
     id: 'r_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
     nombre,
     telefono,
+    email: email || '',
     fecha,
     hora,
     personas,
@@ -769,11 +777,12 @@ function p1LinkGoogleCalendar({ nombre, fecha, hora, personas }) {
 
     const nombre = document.getElementById('nombre');
     const telefono = document.getElementById('telefono');
+    const email = document.getElementById('email');
     const personas = document.getElementById('personas');
     const fecha = fechaInput;
     const hora = horaInput;
 
-    [nombre, telefono, personas, fecha, hora].forEach(clearError);
+    [nombre, telefono, email, personas, fecha, hora].forEach(clearError);
 
     let valid = true;
 
@@ -785,6 +794,11 @@ function p1LinkGoogleCalendar({ nombre, fecha, hora, personas }) {
     const phoneDigits = telefono.value.replace(/\s+/g, '');
     if (!/^[6-9]\d{8}$/.test(phoneDigits)) {
       showError(telefono, 'Introduce un teléfono válido (9 dígitos).');
+      valid = false;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) {
+      showError(email, 'Introduce un correo electrónico válido.');
       valid = false;
     }
 
@@ -808,6 +822,7 @@ function p1LinkGoogleCalendar({ nombre, fecha, hora, personas }) {
     const resultado = p1CrearReserva({
       nombre: nombre.value.trim(),
       telefono: phoneDigits,
+      email: email.value.trim(),
       fecha: fecha.value,
       hora: hora.value,
       personas: personas.value
@@ -823,7 +838,7 @@ function p1LinkGoogleCalendar({ nombre, fecha, hora, personas }) {
       weekday: 'long', day: 'numeric', month: 'long'
     });
 
-    successDetail.textContent = `Hola ${nombre.value.trim().split(' ')[0]}, hemos reservado mesa para ${personas.value} el ${fechaFormateada} a las ${hora.value}h. Te llamaremos al ${telefono.value} para confirmar.`;
+    successDetail.textContent = `Hola ${nombre.value.trim().split(' ')[0]}, hemos reservado mesa para ${personas.value} el ${fechaFormateada} a las ${hora.value}h. Te enviaremos la confirmación a ${email.value.trim()} y te llamaremos al ${telefono.value} si hace falta.`;
     addToCalendar.href = p1LinkGoogleCalendar(resultado.reserva);
 
     modal.classList.remove('hidden');
@@ -834,6 +849,7 @@ function p1LinkGoogleCalendar({ nombre, fecha, hora, personas }) {
     fechaInput.value = today;
     pintarTurnos();
   });
+
 
   closeModal.addEventListener('click', () => {
     modal.classList.add('opacity-0');

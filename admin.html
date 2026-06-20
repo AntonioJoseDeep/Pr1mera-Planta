@@ -93,6 +93,55 @@
   </main>
 </div>
 
+<!-- ============ MODAL: DETALLE DE RESERVA ============ -->
+<div id="detalleModal" class="hidden fixed inset-0 z-[100] items-center justify-center bg-ink/90 backdrop-blur-sm px-6 opacity-0 transition-opacity duration-300">
+  <div class="bg-surface border border-copper/40 rounded-3xl max-w-sm w-full p-8 shadow-2xl">
+    <div class="flex items-start justify-between mb-6">
+      <div>
+        <p class="text-xs eyebrow uppercase text-mute">Reserva</p>
+        <h3 id="detalleNombre" class="font-display text-2xl mt-1">—</h3>
+      </div>
+      <button id="cerrarDetalle" aria-label="Cerrar" class="text-mute hover:text-cream transition">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <dl class="space-y-4 text-sm">
+      <div class="flex justify-between border-b border-line pb-3">
+        <dt class="text-mute">Teléfono</dt>
+        <dd id="detalleTelefono" class="font-medium">—</dd>
+      </div>
+      <div class="flex justify-between border-b border-line pb-3">
+        <dt class="text-mute">Correo</dt>
+        <dd id="detalleEmail" class="font-medium">—</dd>
+      </div>
+      <div class="flex justify-between border-b border-line pb-3">
+        <dt class="text-mute">Personas</dt>
+        <dd id="detallePersonas" class="font-medium">—</dd>
+      </div>
+      <div class="flex justify-between border-b border-line pb-3">
+        <dt class="text-mute">Fecha y turno</dt>
+        <dd id="detalleFechaHora" class="font-medium">—</dd>
+      </div>
+      <div class="flex justify-between border-b border-line pb-3">
+        <dt class="text-mute">Estado</dt>
+        <dd id="detalleEstado" class="font-medium">—</dd>
+      </div>
+      <div class="flex justify-between">
+        <dt class="text-mute">Reservó el</dt>
+        <dd id="detalleCreada" class="font-medium">—</dd>
+      </div>
+    </dl>
+
+    <div class="flex gap-3 mt-7">
+      <a id="detalleLlamar" href="#" class="flex-1 text-center text-sm border border-line rounded-full px-4 py-3 hover:border-copper hover:text-copperlight transition">Llamar</a>
+      <a id="detalleCalendar" href="#" target="_blank" rel="noopener" class="flex-1 text-center text-sm border border-line rounded-full px-4 py-3 hover:border-copper hover:text-copperlight transition">+ Calendar</a>
+    </div>
+  </div>
+</div>
+
 <script>
 /* === Motor de reservas (antes en reservas.js, ahora integrado aqui para que funcione sin depender de archivos externos) === */
 /* =========================================================
@@ -153,7 +202,7 @@ function p1SlotsConDisponibilidad(fecha) {
 }
 
 // Crea una reserva. Devuelve { ok: true, reserva } o { ok: false, motivo }
-function p1CrearReserva({ nombre, telefono, fecha, hora, personas }) {
+function p1CrearReserva({ nombre, telefono, email, fecha, hora, personas }) {
   if (p1LibresEnSlot(fecha, hora) <= 0) {
     return { ok: false, motivo: 'Ese turno se ha completado mientras rellenabas el formulario. Elige otra hora.' };
   }
@@ -161,6 +210,7 @@ function p1CrearReserva({ nombre, telefono, fecha, hora, personas }) {
     id: 'r_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
     nombre,
     telefono,
+    email: email || '',
     fecha,
     hora,
     personas,
@@ -301,18 +351,21 @@ function p1LinkGoogleCalendar({ nombre, fecha, hora, personas }) {
           </div>
         </div>
         <div class="flex items-center gap-2">
-          <a href="${p1LinkGoogleCalendar(r)}" target="_blank" rel="noopener"
-             class="text-xs border border-line rounded-full px-4 py-2 hover:border-copper hover:text-copperlight transition">
-            + Google Calendar
-          </a>
-          <a href="tel:${r.telefono}" class="text-xs border border-line rounded-full px-4 py-2 hover:border-copper hover:text-copperlight transition">
-            Llamar
-          </a>
+          <button data-id="${r.id}" class="verBtn text-xs border border-copper/50 text-copperlight rounded-full px-4 py-2 hover:bg-copper/10 transition">
+            Ver
+          </button>
           <button data-id="${r.id}" class="cancelarBtn text-xs border border-red-400/30 text-red-300 rounded-full px-4 py-2 hover:bg-red-400/10 transition">
             Cancelar
           </button>
         </div>`;
       cont.appendChild(row);
+    });
+
+    document.querySelectorAll('.verBtn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const reserva = reservas.find(r => r.id === btn.dataset.id);
+        if (reserva) abrirDetalle(reserva);
+      });
     });
 
     document.querySelectorAll('.cancelarBtn').forEach(btn => {
@@ -324,6 +377,47 @@ function p1LinkGoogleCalendar({ nombre, fecha, hora, personas }) {
       });
     });
   }
+
+  // ---------- Pop-up de detalle de la reserva ----------
+  const detalleModal = document.getElementById('detalleModal');
+
+  function abrirDetalle(r) {
+    document.getElementById('detalleNombre').textContent = r.nombre;
+    document.getElementById('detalleTelefono').textContent = r.telefono || '—';
+    document.getElementById('detalleEmail').textContent = r.email || '— (no indicado)';
+    document.getElementById('detallePersonas').textContent = r.personas;
+
+    const fechaFormateada = new Date(r.fecha + 'T00:00:00').toLocaleDateString('es-ES', {
+      weekday: 'long', day: 'numeric', month: 'long'
+    });
+    document.getElementById('detalleFechaHora').textContent = `${fechaFormateada}, ${r.hora}h`;
+
+    const estadoEl = document.getElementById('detalleEstado');
+    estadoEl.textContent = r.estado === 'cancelada' ? 'Cancelada' : 'Confirmada';
+    estadoEl.className = 'font-medium ' + (r.estado === 'cancelada' ? 'text-red-300' : 'text-sage');
+
+    document.getElementById('detalleCreada').textContent = new Date(r.creada).toLocaleString('es-ES');
+
+    document.getElementById('detalleLlamar').href = 'tel:' + r.telefono;
+    document.getElementById('detalleCalendar').href = p1LinkGoogleCalendar(r);
+
+    detalleModal.classList.remove('hidden');
+    detalleModal.classList.add('flex');
+    requestAnimationFrame(() => detalleModal.classList.remove('opacity-0'));
+  }
+
+  function cerrarDetalleModal() {
+    detalleModal.classList.add('opacity-0');
+    setTimeout(() => {
+      detalleModal.classList.add('hidden');
+      detalleModal.classList.remove('flex');
+    }, 300);
+  }
+
+  document.getElementById('cerrarDetalle').addEventListener('click', cerrarDetalleModal);
+  detalleModal.addEventListener('click', (e) => {
+    if (e.target === detalleModal) cerrarDetalleModal();
+  });
 
   function pintarTodo() {
     const fecha = fechaPanel.value;
