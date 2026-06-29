@@ -1,17 +1,22 @@
 import { reservasDelDia, slotsConDisponibilidad, crearReserva } from '../../../lib/reservas.js';
+import { isAuthenticated } from '../../../lib/session.js';
+import { enviarEmailConfirmacion } from '../../../lib/email.js';
 
 export const prerender = false;
 
-export async function GET({ url }) {
+export async function GET({ url, cookies }) {
   const fecha = url.searchParams.get('fecha');
   if (!fecha) {
     return new Response(JSON.stringify({ error: 'Falta el parámetro fecha' }), { status: 400 });
   }
+
+  const slots = slotsConDisponibilidad(fecha);
+  if (!isAuthenticated(cookies)) {
+    return new Response(JSON.stringify({ slots }), { headers: { 'Content-Type': 'application/json' } });
+  }
+
   return new Response(
-    JSON.stringify({
-      reservas: reservasDelDia(fecha),
-      slots: slotsConDisponibilidad(fecha),
-    }),
+    JSON.stringify({ reservas: reservasDelDia(fecha), slots }),
     { headers: { 'Content-Type': 'application/json' } }
   );
 }
@@ -42,6 +47,10 @@ export async function POST({ request }) {
     hora,
     personas,
   });
+
+  if (resultado.ok) {
+    enviarEmailConfirmacion(resultado.reserva).catch(() => {});
+  }
 
   return new Response(JSON.stringify(resultado), {
     status: resultado.ok ? 200 : 409,

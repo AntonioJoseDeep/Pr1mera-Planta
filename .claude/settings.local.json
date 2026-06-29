@@ -10,7 +10,18 @@
       "Bash(curl -s -X PATCH \"http://localhost:4322/api/reservas/r_1782716400606_eo3xm\")",
       "Bash(curl -s http://localhost:4322/api/reservas?fecha=__TRACKED_VAR__)",
       "Bash(kill %1 %2)",
-      "Bash(pkill -f \"astro dev\")"
+      "Bash(pkill -f \"astro dev\")",
+      "WebSearch",
+      "Bash(npm run *)",
+      "Bash(sleep 4; cat /tmp/astro_dev5.log)",
+      "Bash(curl -s http://localhost:4321/api/admin/session)",
+      "Bash(curl -s -i -X POST http://localhost:4321/api/admin/login -H \"Content-Type: application/json\" -H \"Origin: http://localhost:4321\" -d '{\"pass\":\"incorrecta\"}')",
+      "Bash(curl -s -i \"http://localhost:4321/api/reservas/mes?anio=2026&mes=6\")",
+      "Bash(curl -s -c /tmp/cookies.txt -X POST http://localhost:4321/api/admin/login -H \"Content-Type: application/json\" -H \"Origin: http://localhost:4321\" -d '{\"pass\":\"altorreal\"}')",
+      "Bash(curl -s -b /tmp/cookies.txt \"http://localhost:4321/api/reservas/mes?anio=2026&mes=6\")",
+      "Bash(curl -s \"http://localhost:4321/api/reservas?fecha=2026-06-15\")",
+      "Bash(sleep 4; cat /tmp/astro_dev7.log)",
+      "Bash(sleep 4; cat /tmp/astro_dev8.log)"
     ]
   }
 }

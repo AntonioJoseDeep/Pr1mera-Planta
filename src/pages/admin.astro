@@ -45,7 +45,6 @@ const P1_TOTAL_MESAS = 20;
     <input type="password" id="pass" class="field-input w-full bg-ink/60 border border-line rounded-lg px-4 py-3 text-cream mb-2" placeholder="••••••••">
     <p id="loginError" class="hidden text-red-400 text-xs mb-3">Contraseña incorrecta.</p>
     <button class="w-full bg-copper text-ink font-semibold px-6 py-3 rounded-full mt-2">Entrar</button>
-    <p class="text-mute/50 text-xs mt-5 leading-relaxed">Demo: contraseña <code class="text-copperlight">altorreal</code>. Cámbiala en el código antes de usar el panel en producción.</p>
   </form>
 </div>
 
@@ -71,9 +70,26 @@ const P1_TOTAL_MESAS = 20;
     </div>
 
     <div class="flex flex-wrap items-end gap-4 mb-10">
-      <div>
-        <label for="fechaPanel" class="block text-xs eyebrow uppercase text-mute mb-2">Día</label>
-        <input type="date" id="fechaPanel" class="field-input bg-surface border border-line rounded-lg px-4 py-3 text-cream">
+      <div class="relative">
+        <label for="fechaPanelDisplay" class="block text-xs eyebrow uppercase text-mute mb-2">Día</label>
+        <button type="button" id="fechaPanelDisplay"
+          class="field-input bg-surface border border-line rounded-lg px-4 py-3 text-cream flex items-center gap-2">
+          <span id="fechaPanelText">—</span>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-mute" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+          </svg>
+        </button>
+        <div id="calendarPanelPopup" class="hidden absolute z-20 mt-2 bg-surface border border-copper/40 rounded-2xl p-4 shadow-2xl w-80">
+          <div class="flex items-center justify-between mb-3">
+            <button type="button" id="calPanelPrev" class="h-8 w-8 rounded-full border border-line flex items-center justify-center hover:border-copper hover:text-copperlight transition">‹</button>
+            <span id="calPanelLabel" class="font-display text-sm text-cream"></span>
+            <button type="button" id="calPanelNext" class="h-8 w-8 rounded-full border border-line flex items-center justify-center hover:border-copper hover:text-copperlight transition">›</button>
+          </div>
+          <div class="grid grid-cols-7 gap-1 text-center text-[10px] text-mute mb-1">
+            <span>L</span><span>M</span><span>X</span><span>J</span><span>V</span><span>S</span><span>D</span>
+          </div>
+          <div id="calPanelGrid" class="grid grid-cols-7 gap-1 text-center text-xs"></div>
+        </div>
       </div>
       <div class="flex gap-2">
         <button id="hoyBtn" class="text-sm border border-line rounded-full px-4 py-2.5 hover:border-copper hover:text-copperlight transition">Hoy</button>
@@ -142,12 +158,49 @@ const P1_TOTAL_MESAS = 20;
       <a id="detalleLlamar" href="#" class="flex-1 text-center text-sm border border-line rounded-full px-4 py-3 hover:border-copper hover:text-copperlight transition">Llamar</a>
       <a id="detalleCalendar" href="#" target="_blank" rel="noopener" class="flex-1 text-center text-sm border border-line rounded-full px-4 py-3 hover:border-copper hover:text-copperlight transition">+ Calendar</a>
     </div>
+    <button id="abrirEditar" class="w-full text-center text-sm bg-copper text-ink font-semibold rounded-full px-4 py-3 mt-3 hover:bg-copperlight transition">Editar reserva</button>
+  </div>
+</div>
+
+<!-- ============ MODAL: EDITAR RESERVA ============ -->
+<div id="editarModal" class="hidden fixed inset-0 z-[110] items-center justify-center bg-ink/90 backdrop-blur-sm px-6 opacity-0 transition-opacity duration-300">
+  <div class="bg-surface border border-copper/40 rounded-3xl max-w-sm w-full p-8 shadow-2xl">
+    <div class="flex items-start justify-between mb-6">
+      <div>
+        <p class="text-xs eyebrow uppercase text-mute">Editar reserva</p>
+        <h3 id="editarNombre" class="font-display text-2xl mt-1">—</h3>
+      </div>
+      <button id="cerrarEditar" aria-label="Cerrar" class="text-mute hover:text-cream transition">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <label for="editarFecha" class="block text-xs eyebrow uppercase text-mute mb-2">Fecha</label>
+    <input type="date" id="editarFecha" class="field-input w-full bg-ink/60 border border-line rounded-lg px-4 py-3 text-cream mb-4">
+
+    <label class="block text-xs eyebrow uppercase text-mute mb-2">Turno</label>
+    <div id="editarTurnoGrid" class="grid grid-cols-4 gap-2 mb-4"></div>
+
+    <label for="editarPersonas" class="block text-xs eyebrow uppercase text-mute mb-2">Personas</label>
+    <select id="editarPersonas" class="field-input w-full bg-ink/60 border border-line rounded-lg px-4 py-3 text-cream mb-2">
+      <option style="background-color:#19120D; color:#C9854B;">1 persona</option>
+      <option style="background-color:#19120D; color:#C9854B;">2 personas</option>
+      <option style="background-color:#19120D; color:#C9854B;">3 personas</option>
+      <option style="background-color:#19120D; color:#C9854B;">4 personas</option>
+      <option style="background-color:#19120D; color:#C9854B;">5 personas</option>
+      <option style="background-color:#19120D; color:#C9854B;">6 personas</option>
+      <option style="background-color:#19120D; color:#C9854B;">7 o más (llámanos)</option>
+    </select>
+    <p id="editarError" class="hidden text-red-400 text-xs mb-2"></p>
+
+    <button id="guardarEditar" class="w-full bg-copper text-ink font-semibold rounded-full px-4 py-3 mt-3 hover:bg-copperlight transition">Guardar cambios</button>
   </div>
 </div>
 
 <script define:vars={{ P1_TOTAL_MESAS }}>
   // ---------- Acceso ----------
-  const ADMIN_PASS = 'altorreal'; // ⚠️ cambia esto antes de usarlo en producción real
   const loginGate = document.getElementById('loginGate');
   const panel = document.getElementById('panel');
   const loginForm = document.getElementById('loginForm');
@@ -159,15 +212,21 @@ const P1_TOTAL_MESAS = 20;
     pintarTodo();
   }
 
-  if (sessionStorage.getItem('p1_admin') === '1') {
-    mostrarPanel();
-  }
+  (async () => {
+    const res = await fetch('/api/admin/session');
+    const data = await res.json();
+    if (data.authenticated) mostrarPanel();
+  })();
 
-  loginForm.addEventListener('submit', (e) => {
+  loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const val = document.getElementById('pass').value;
-    if (val === ADMIN_PASS) {
-      sessionStorage.setItem('p1_admin', '1');
+    const res = await fetch('/api/admin/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pass: val }),
+    });
+    if (res.ok) {
       loginError.classList.add('hidden');
       mostrarPanel();
     } else {
@@ -175,15 +234,28 @@ const P1_TOTAL_MESAS = 20;
     }
   });
 
-  document.getElementById('logoutBtn').addEventListener('click', () => {
-    sessionStorage.removeItem('p1_admin');
+  document.getElementById('logoutBtn').addEventListener('click', async () => {
+    await fetch('/api/admin/logout', { method: 'POST' });
     location.reload();
   });
 
-  // ---------- Selector de día ----------
-  const fechaPanel = document.getElementById('fechaPanel');
+  // ---------- Selector de día (calendario propio) ----------
   const todayStr = new Date().toISOString().split('T')[0];
-  fechaPanel.value = todayStr;
+  const fechaPanelDisplay = document.getElementById('fechaPanelDisplay');
+  const fechaPanelText = document.getElementById('fechaPanelText');
+  const calendarPanelPopup = document.getElementById('calendarPanelPopup');
+  const calPanelGrid = document.getElementById('calPanelGrid');
+  const calPanelLabel = document.getElementById('calPanelLabel');
+  const calPanelPrev = document.getElementById('calPanelPrev');
+  const calPanelNext = document.getElementById('calPanelNext');
+
+  const MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  const fechaPanel = { value: todayStr };
+  const todayDate = new Date();
+  let calPanelViewYear = todayDate.getFullYear();
+  let calPanelViewMonth = todayDate.getMonth(); // 0-indexed
+  let conteoMesActual = {};
+  fechaPanelText.textContent = fechaFormateadaCorta(todayStr);
 
   function tomorrowStr() {
     const d = new Date();
@@ -191,12 +263,81 @@ const P1_TOTAL_MESAS = 20;
     return d.toISOString().split('T')[0];
   }
 
-  document.getElementById('hoyBtn').addEventListener('click', () => { fechaPanel.value = todayStr; pintarTodo(); });
-  document.getElementById('mananaBtn').addEventListener('click', () => { fechaPanel.value = tomorrowStr(); pintarTodo(); });
-  fechaPanel.addEventListener('change', pintarTodo);
+  function fechaFormateadaCorta(isoStr) {
+    const d = new Date(isoStr + 'T00:00:00');
+    return d.toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+  }
+
+  function setFechaPanel(isoStr) {
+    fechaPanel.value = isoStr;
+    fechaPanelText.textContent = fechaFormateadaCorta(isoStr);
+    pintarTodo();
+  }
+
+  async function cargarConteoMes(anio, mes) {
+    const res = await fetch(`/api/reservas/mes?anio=${anio}&mes=${mes}`);
+    const data = await res.json();
+    conteoMesActual = data.conteo;
+  }
+
+  async function renderCalendarioPanel() {
+    calPanelLabel.textContent = `${MESES[calPanelViewMonth]} ${calPanelViewYear}`;
+    await cargarConteoMes(calPanelViewYear, calPanelViewMonth + 1);
+    calPanelGrid.innerHTML = '';
+
+    const firstOfMonth = new Date(calPanelViewYear, calPanelViewMonth, 1);
+    const startOffset = (firstOfMonth.getDay() + 6) % 7; // lunes=0
+    const daysInMonth = new Date(calPanelViewYear, calPanelViewMonth + 1, 0).getDate();
+
+    for (let i = 0; i < startOffset; i++) {
+      calPanelGrid.appendChild(document.createElement('span'));
+    }
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const iso = `${calPanelViewYear}-${String(calPanelViewMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      const n = conteoMesActual[iso] || 0;
+      const isSelected = iso === fechaPanel.value;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'h-12 rounded-lg flex flex-col items-center justify-center transition ' +
+        (isSelected ? 'bg-copper text-ink font-semibold' : 'text-cream hover:bg-copper/20');
+      btn.innerHTML = `<span>${day}</span>` +
+        (n > 0 ? `<span class="text-[10px] ${isSelected ? 'text-ink/70' : 'text-copperlight'}">${n}</span>` : '');
+      btn.addEventListener('click', () => {
+        setFechaPanel(iso);
+        calendarPanelPopup.classList.add('hidden');
+        renderCalendarioPanel();
+      });
+      calPanelGrid.appendChild(btn);
+    }
+  }
+
+  calPanelPrev.addEventListener('click', () => {
+    calPanelViewMonth--;
+    if (calPanelViewMonth < 0) { calPanelViewMonth = 11; calPanelViewYear--; }
+    renderCalendarioPanel();
+  });
+  calPanelNext.addEventListener('click', () => {
+    calPanelViewMonth++;
+    if (calPanelViewMonth > 11) { calPanelViewMonth = 0; calPanelViewYear++; }
+    renderCalendarioPanel();
+  });
+
+  fechaPanelDisplay.addEventListener('click', () => {
+    calendarPanelPopup.classList.toggle('hidden');
+    renderCalendarioPanel();
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!calendarPanelPopup.contains(e.target) && e.target !== fechaPanelDisplay && !fechaPanelDisplay.contains(e.target)) {
+      calendarPanelPopup.classList.add('hidden');
+    }
+  });
+
+  document.getElementById('hoyBtn').addEventListener('click', () => { setFechaPanel(todayStr); });
+  document.getElementById('mananaBtn').addEventListener('click', () => { setFechaPanel(tomorrowStr()); });
 
   window.addEventListener('pageshow', () => {
-    if (!fechaPanel.value) fechaPanel.value = todayStr;
     if (sessionStorage.getItem('p1_admin') === '1') pintarTodo();
   });
 
@@ -295,8 +436,10 @@ const P1_TOTAL_MESAS = 20;
 
   // ---------- Pop-up de detalle de la reserva ----------
   const detalleModal = document.getElementById('detalleModal');
+  let reservaActual = null;
 
   function abrirDetalle(r) {
+    reservaActual = r;
     document.getElementById('detalleNombre').textContent = r.nombre;
     document.getElementById('detalleTelefono').textContent = r.telefono || '—';
     document.getElementById('detalleEmail').textContent = r.email || '— (no indicado)';
@@ -332,6 +475,99 @@ const P1_TOTAL_MESAS = 20;
   document.getElementById('cerrarDetalle').addEventListener('click', cerrarDetalleModal);
   detalleModal.addEventListener('click', (e) => {
     if (e.target === detalleModal) cerrarDetalleModal();
+  });
+
+  // ---------- Modal: editar reserva ----------
+  const editarModal = document.getElementById('editarModal');
+  const editarFecha = document.getElementById('editarFecha');
+  const editarTurnoGrid = document.getElementById('editarTurnoGrid');
+  const editarPersonas = document.getElementById('editarPersonas');
+  const editarError = document.getElementById('editarError');
+  let editarHoraSeleccionada = null;
+
+  async function pintarTurnosEditar(fecha) {
+    editarTurnoGrid.innerHTML = '';
+    const res = await fetch('/api/reservas?fecha=' + encodeURIComponent(fecha));
+    const data = await res.json();
+
+    data.slots.forEach(s => {
+      const esLaPropia = fecha === reservaActual.fecha && s.hora === reservaActual.hora;
+      const completo = s.completo && !esLaPropia;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.textContent = s.hora;
+      btn.disabled = completo;
+      const seleccionado = s.hora === editarHoraSeleccionada;
+      btn.className = 'rounded-lg border px-2 py-2 text-xs transition ' +
+        (completo ? 'border-line text-mute/30 cursor-not-allowed line-through' :
+         seleccionado ? 'bg-copper border-copper text-ink font-semibold' :
+         'border-line text-cream hover:border-copper');
+      if (!completo) {
+        btn.addEventListener('click', () => {
+          editarHoraSeleccionada = s.hora;
+          pintarTurnosEditar(fecha);
+        });
+      }
+      editarTurnoGrid.appendChild(btn);
+    });
+  }
+
+  document.getElementById('abrirEditar').addEventListener('click', () => {
+    if (!reservaActual) return;
+    editarFecha.value = reservaActual.fecha;
+    editarPersonas.value = reservaActual.personas;
+    editarHoraSeleccionada = reservaActual.hora;
+    document.getElementById('editarNombre').textContent = reservaActual.nombre;
+    editarError.classList.add('hidden');
+    pintarTurnosEditar(reservaActual.fecha);
+
+    cerrarDetalleModal();
+    editarModal.classList.remove('hidden');
+    editarModal.classList.add('flex');
+    requestAnimationFrame(() => editarModal.classList.remove('opacity-0'));
+  });
+
+  editarFecha.addEventListener('change', () => {
+    editarHoraSeleccionada = null;
+    pintarTurnosEditar(editarFecha.value);
+  });
+
+  function cerrarEditarModal() {
+    editarModal.classList.add('opacity-0');
+    setTimeout(() => {
+      editarModal.classList.add('hidden');
+      editarModal.classList.remove('flex');
+    }, 300);
+  }
+  document.getElementById('cerrarEditar').addEventListener('click', cerrarEditarModal);
+  editarModal.addEventListener('click', (e) => {
+    if (e.target === editarModal) cerrarEditarModal();
+  });
+
+  document.getElementById('guardarEditar').addEventListener('click', async () => {
+    if (!editarHoraSeleccionada) {
+      editarError.textContent = 'Selecciona un turno.';
+      editarError.classList.remove('hidden');
+      return;
+    }
+    const res = await fetch('/api/reservas/' + reservaActual.id, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'editar',
+        fecha: editarFecha.value,
+        hora: editarHoraSeleccionada,
+        personas: editarPersonas.value,
+      }),
+    });
+    const resultado = await res.json();
+    if (!resultado.ok) {
+      editarError.textContent = resultado.motivo || 'No se ha podido guardar el cambio.';
+      editarError.classList.remove('hidden');
+      return;
+    }
+    cerrarEditarModal();
+    pintarTodo();
   });
 
   async function pintarTodo() {

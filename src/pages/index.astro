@@ -298,7 +298,7 @@ const P1_TOTAL_MESAS = 20;
     <div class="text-center max-w-2xl mx-auto fade-up">
       <span class="badge-floor text-copperlight text-sm eyebrow uppercase">02 · La Carta</span>
       <h2 class="font-display font-medium text-3xl sm:text-4xl lg:text-5xl mt-4">Para compartir, sin prisa</h2>
-      <p class="mt-5 text-mute text-lg">Este es el repertorio de tapas que va pasando por las mesas, además de los platos principales y bebidas que puedes pedir directamente. Precios por unidad / persona.</p>
+      <p class="mt-5 text-mute text-lg">Este es el repertorio de tapas que va pasando por las mesas, además de los platos principales y bebidas que puedes pedir directamente. La primera caña y tapa, por solo 3€.</p>
     </div>
 
     <!-- tabs -->
@@ -310,31 +310,101 @@ const P1_TOTAL_MESAS = 20;
 
     <!-- TAPAS -->
     <div id="panel-tapas" class="menu-panel active fade-up">
-      <p class="text-center text-mute/70 text-sm mb-8 -mt-2">Precio por tapa y persona · solo se cobra lo que aceptas en la mesa.</p>
+      <div class="max-w-2xl mx-auto border border-copper/40 bg-copper/10 rounded-2xl px-6 py-4 mb-10 text-center">
+        <p class="font-display text-xl text-copperlight">1ª caña o bebida + 1ª tapa: 3€</p>
+        <p class="text-mute text-sm mt-1">Las siguientes tapas, a 1,50€ / 2€ / 2,50€ según el plato. Solo pagas lo que aceptas en la mesa.</p>
+      </div>
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        <div class="card-dish border border-line rounded-xl p-6">
-          <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Croquetas de jamón ibérico</h3><span class="text-copperlight font-semibold">10,50€</span></div>
-          <p class="text-mute text-sm mt-2">Cremosas, hechas a diario. Ración de 8 unidades.</p>
+        <div class="card-dish border border-line rounded-xl overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?q=80&w=900&auto=format&fit=crop" alt="Croquetas de jamón ibérico" class="h-44 w-full object-cover">
+          <div class="p-6">
+            <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Croquetas de jamón ibérico</h3><span class="text-copperlight font-semibold">2,50€</span></div>
+            <p class="text-mute text-sm mt-2">Cremosas, hechas a diario.</p>
+          </div>
         </div>
-        <div class="card-dish border border-line rounded-xl p-6">
-          <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Patatas Pr1mera Planta</h3><span class="text-copperlight font-semibold">8,90€</span></div>
-          <p class="text-mute text-sm mt-2">Patata confitada, alioli ahumado y crujiente de jamón.</p>
+        <div class="card-dish border border-line rounded-xl overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1639024471283-03518883512d?q=80&w=900&auto=format&fit=crop" alt="Patatas Pr1mera Planta" class="h-44 w-full object-cover">
+          <div class="p-6">
+            <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Patatas Pr1mera Planta</h3><span class="text-copperlight font-semibold">2€</span></div>
+            <p class="text-mute text-sm mt-2">Patata confitada, alioli ahumado y crujiente de jamón.</p>
+          </div>
         </div>
-        <div class="card-dish border border-line rounded-xl p-6">
-          <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Tataki de atún rojo</h3><span class="text-copperlight font-semibold">13,50€</span></div>
-          <p class="text-mute text-sm mt-2">Sésamo tostado, soja dulce y aguacate.</p>
+        <div class="card-dish border border-line rounded-xl overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1553621042-f6e147245754?q=80&w=900&auto=format&fit=crop" alt="Tataki de atún rojo" class="h-44 w-full object-cover">
+          <div class="p-6">
+            <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Tataki de atún rojo</h3><span class="text-copperlight font-semibold">2,50€</span></div>
+            <p class="text-mute text-sm mt-2">Sésamo tostado, soja dulce y aguacate.</p>
+          </div>
         </div>
-        <div class="card-dish border border-line rounded-xl p-6">
-          <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Tabla de quesos curados</h3><span class="text-copperlight font-semibold">14,00€</span></div>
-          <p class="text-mute text-sm mt-2">Selección de queso murciano con mermelada de higo.</p>
+        <div class="card-dish border border-line rounded-xl overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1452195100486-9cc805987862?q=80&w=900&auto=format&fit=crop" alt="Tabla de quesos curados" class="h-44 w-full object-cover">
+          <div class="p-6">
+            <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Tabla de quesos curados</h3><span class="text-copperlight font-semibold">2,50€</span></div>
+            <p class="text-mute text-sm mt-2">Selección de queso murciano con mermelada de higo.</p>
+          </div>
         </div>
-        <div class="card-dish border border-line rounded-xl p-6">
-          <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Gyozas de verdura</h3><span class="text-copperlight font-semibold">9,50€</span></div>
-          <p class="text-mute text-sm mt-2">Salteadas, salsa teriyaki casera.</p>
+        <div class="card-dish border border-line rounded-xl overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1496116218417-1a781b1c416c?q=80&w=900&auto=format&fit=crop" alt="Gyozas de verdura" class="h-44 w-full object-cover">
+          <div class="p-6">
+            <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Gyozas de verdura</h3><span class="text-copperlight font-semibold">2€</span></div>
+            <p class="text-mute text-sm mt-2">Salteadas, salsa teriyaki casera.</p>
+          </div>
         </div>
-        <div class="card-dish border border-line rounded-xl p-6">
-          <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Pan de cristal con tomate</h3><span class="text-copperlight font-semibold">6,50€</span></div>
-          <p class="text-mute text-sm mt-2">Aceite de oliva virgen extra y sal en escamas.</p>
+        <div class="card-dish border border-line rounded-xl overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1590301157890-4810ed352733?q=80&w=900&auto=format&fit=crop" alt="Pan de cristal con tomate" class="h-44 w-full object-cover">
+          <div class="p-6">
+            <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Pan de cristal con tomate</h3><span class="text-copperlight font-semibold">1,50€</span></div>
+            <p class="text-mute text-sm mt-2">Aceite de oliva virgen extra y sal en escamas.</p>
+          </div>
+        </div>
+        <div class="card-dish border border-line rounded-xl overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1432139509613-5c4255815697?q=80&w=900&auto=format&fit=crop" alt="Carrillera ibérica al vino" class="h-44 w-full object-cover">
+          <div class="p-6">
+            <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Carrillera ibérica al vino</h3><span class="text-copperlight font-semibold">2,50€</span></div>
+            <p class="text-mute text-sm mt-2">Cocción lenta, reducción de vino tinto y puré de patata.</p>
+          </div>
+        </div>
+        <div class="card-dish border border-line rounded-xl overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?q=80&w=900&auto=format&fit=crop" alt="Calamares a la andaluza" class="h-44 w-full object-cover">
+          <div class="p-6">
+            <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Calamares a la andaluza</h3><span class="text-copperlight font-semibold">2,50€</span></div>
+            <p class="text-mute text-sm mt-2">Fritos en aceite de oliva, con limón.</p>
+          </div>
+        </div>
+        <div class="card-dish border border-line rounded-xl overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1623653387945-2fd25214f8fc?q=80&w=900&auto=format&fit=crop" alt="Gambas al ajillo" class="h-44 w-full object-cover">
+          <div class="p-6">
+            <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Gambas al ajillo</h3><span class="text-copperlight font-semibold">2,50€</span></div>
+            <p class="text-mute text-sm mt-2">Ajo dorado, guindilla y un toque de brandy.</p>
+          </div>
+        </div>
+        <div class="card-dish border border-line rounded-xl overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1432139555190-58524dae6a55?q=80&w=900&auto=format&fit=crop" alt="Pulpo a la brasa" class="h-44 w-full object-cover">
+          <div class="p-6">
+            <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Pulpo a la brasa</h3><span class="text-copperlight font-semibold">2,50€</span></div>
+            <p class="text-mute text-sm mt-2">Pimentón de la Vera y aceite de oliva virgen.</p>
+          </div>
+        </div>
+        <div class="card-dish border border-line rounded-xl overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1551782450-a2132b4ba21d?q=80&w=900&auto=format&fit=crop" alt="Doble tapa de la casa" class="h-44 w-full object-cover">
+          <div class="p-6">
+            <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Doble tapa de la casa</h3><span class="text-copperlight font-semibold">2€</span></div>
+            <p class="text-mute text-sm mt-2">Dos elaboraciones para compartir, con salsas originales de la casa.</p>
+          </div>
+        </div>
+        <div class="card-dish border border-line rounded-xl overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?q=80&w=900&auto=format&fit=crop" alt="Verduras a la brasa" class="h-44 w-full object-cover">
+          <div class="p-6">
+            <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Verduras de temporada a la brasa</h3><span class="text-copperlight font-semibold">1,50€</span></div>
+            <p class="text-mute text-sm mt-2">Aceite de oliva virgen extra y sal en escamas.</p>
+          </div>
+        </div>
+        <div class="card-dish border border-line rounded-xl overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=900&auto=format&fit=crop" alt="Secreto ibérico a la brasa" class="h-44 w-full object-cover">
+          <div class="p-6">
+            <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Secreto ibérico a la brasa</h3><span class="text-copperlight font-semibold">2,50€</span></div>
+            <p class="text-mute text-sm mt-2">A la brasa, con sal en escamas.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -342,29 +412,47 @@ const P1_TOTAL_MESAS = 20;
     <!-- PRINCIPALES -->
     <div id="panel-principales" class="menu-panel fade-up">
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        <div class="card-dish border border-line rounded-xl p-6">
-          <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Arroz meloso de marisco</h3><span class="text-copperlight font-semibold">18,50€</span></div>
-          <p class="text-mute text-sm mt-2">Para dos personas. Fumet de pescado de la lonja.</p>
+        <div class="card-dish border border-line rounded-xl overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?q=80&w=900&auto=format&fit=crop" alt="Arroz meloso de marisco" class="h-44 w-full object-cover">
+          <div class="p-6">
+            <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Arroz meloso de marisco</h3><span class="text-copperlight font-semibold">18,50€</span></div>
+            <p class="text-mute text-sm mt-2">Para dos personas. Fumet de pescado de la lonja.</p>
+          </div>
         </div>
-        <div class="card-dish border border-line rounded-xl p-6">
-          <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Entrecot a la brasa</h3><span class="text-copperlight font-semibold">19,90€</span></div>
-          <p class="text-mute text-sm mt-2">Con patatas confitadas y pimientos de padrón.</p>
+        <div class="card-dish border border-line rounded-xl overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1546964124-0cce460f38ef?q=80&w=900&auto=format&fit=crop" alt="Entrecot a la brasa" class="h-44 w-full object-cover">
+          <div class="p-6">
+            <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Entrecot a la brasa</h3><span class="text-copperlight font-semibold">19,90€</span></div>
+            <p class="text-mute text-sm mt-2">Con patatas confitadas y pimientos de padrón.</p>
+          </div>
         </div>
-        <div class="card-dish border border-line rounded-xl p-6">
-          <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Burger Pr1mera Planta</h3><span class="text-copperlight font-semibold">14,50€</span></div>
-          <p class="text-mute text-sm mt-2">Carne madurada, queso curado y cebolla caramelizada.</p>
+        <div class="card-dish border border-line rounded-xl overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=900&auto=format&fit=crop" alt="Burger Pr1mera Planta" class="h-44 w-full object-cover">
+          <div class="p-6">
+            <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Burger Pr1mera Planta</h3><span class="text-copperlight font-semibold">14,50€</span></div>
+            <p class="text-mute text-sm mt-2">Carne madurada, queso curado y cebolla caramelizada.</p>
+          </div>
         </div>
-        <div class="card-dish border border-line rounded-xl p-6">
-          <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Lubina a la plancha</h3><span class="text-copperlight font-semibold">17,90€</span></div>
-          <p class="text-mute text-sm mt-2">Con verduras de temporada salteadas.</p>
+        <div class="card-dish border border-line rounded-xl overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?q=80&w=900&auto=format&fit=crop" alt="Lubina a la plancha" class="h-44 w-full object-cover">
+          <div class="p-6">
+            <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Lubina a la plancha</h3><span class="text-copperlight font-semibold">17,90€</span></div>
+            <p class="text-mute text-sm mt-2">Con verduras de temporada salteadas.</p>
+          </div>
         </div>
-        <div class="card-dish border border-line rounded-xl p-6">
-          <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Risotto de boletus</h3><span class="text-copperlight font-semibold">15,50€</span></div>
-          <p class="text-mute text-sm mt-2">Cremoso, con parmesano curado 24 meses.</p>
+        <div class="card-dish border border-line rounded-xl overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1476124369491-e7addf5db371?q=80&w=900&auto=format&fit=crop" alt="Risotto de boletus" class="h-44 w-full object-cover">
+          <div class="p-6">
+            <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Risotto de boletus</h3><span class="text-copperlight font-semibold">15,50€</span></div>
+            <p class="text-mute text-sm mt-2">Cremoso, con parmesano curado 24 meses.</p>
+          </div>
         </div>
-        <div class="card-dish border border-line rounded-xl p-6">
-          <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Ensalada templada de pato</h3><span class="text-copperlight font-semibold">13,90€</span></div>
-          <p class="text-mute text-sm mt-2">Magret, vinagreta de frutos rojos y brotes tiernos.</p>
+        <div class="card-dish border border-line rounded-xl overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1505253758473-96b7015fcd40?q=80&w=900&auto=format&fit=crop" alt="Ensalada templada de pato" class="h-44 w-full object-cover">
+          <div class="p-6">
+            <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Ensalada templada de pato</h3><span class="text-copperlight font-semibold">13,90€</span></div>
+            <p class="text-mute text-sm mt-2">Magret, vinagreta de frutos rojos y brotes tiernos.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -372,29 +460,89 @@ const P1_TOTAL_MESAS = 20;
     <!-- BEBIDAS -->
     <div id="panel-bebidas" class="menu-panel fade-up">
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        <div class="card-dish border border-line rounded-xl p-6">
-          <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Caña / Copa de vino</h3><span class="text-copperlight font-semibold">3,20€</span></div>
-          <p class="text-mute text-sm mt-2">Selección de cervezas de barril y vinos D.O. Jumilla.</p>
+        <div class="card-dish border border-line rounded-xl overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1535958636474-b021ee887b13?q=80&w=900&auto=format&fit=crop" alt="Caña de cerveza" class="h-44 w-full object-cover">
+          <div class="p-6">
+            <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Caña / Copa de vino</h3><span class="text-copperlight font-semibold">3,20€</span></div>
+            <p class="text-mute text-sm mt-2">Selección de cervezas de barril y vinos D.O. Jumilla.</p>
+          </div>
         </div>
-        <div class="card-dish border border-line rounded-xl p-6">
-          <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Gin Tonic Premium</h3><span class="text-copperlight font-semibold">9,50€</span></div>
-          <p class="text-mute text-sm mt-2">Ginebras seleccionadas con botánicos frescos.</p>
+        <div class="card-dish border border-line rounded-xl overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1536935338788-846bb9981813?q=80&w=900&auto=format&fit=crop" alt="Gin Tonic Premium" class="h-44 w-full object-cover">
+          <div class="p-6">
+            <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Gin Tonic Premium</h3><span class="text-copperlight font-semibold">9,50€</span></div>
+            <p class="text-mute text-sm mt-2">Ginebras seleccionadas con botánicos frescos.</p>
+          </div>
         </div>
-        <div class="card-dish border border-line rounded-xl p-6">
-          <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Cóctel de autor</h3><span class="text-copperlight font-semibold">8,90€</span></div>
-          <p class="text-mute text-sm mt-2">Carta de coctelería de temporada, pregunta a tu camarero.</p>
+        <div class="card-dish border border-line rounded-xl overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1551538827-9c037cb4f32a?q=80&w=900&auto=format&fit=crop" alt="Cóctel de autor" class="h-44 w-full object-cover">
+          <div class="p-6">
+            <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Cóctel de autor</h3><span class="text-copperlight font-semibold">8,90€</span></div>
+            <p class="text-mute text-sm mt-2">Carta de coctelería de temporada, pregunta a tu camarero.</p>
+          </div>
         </div>
-        <div class="card-dish border border-line rounded-xl p-6">
-          <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Vermut de grifo</h3><span class="text-copperlight font-semibold">4,00€</span></div>
-          <p class="text-mute text-sm mt-2">Con aceitunas y patatas fritas caseras.</p>
+        <div class="card-dish border border-line rounded-xl overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1560512823-829485b8bf24?q=80&w=900&auto=format&fit=crop" alt="Vermut de grifo" class="h-44 w-full object-cover">
+          <div class="p-6">
+            <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Vermut de grifo</h3><span class="text-copperlight font-semibold">4,00€</span></div>
+            <p class="text-mute text-sm mt-2">Con aceitunas y patatas fritas caseras.</p>
+          </div>
         </div>
-        <div class="card-dish border border-line rounded-xl p-6">
-          <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Limonada de la casa</h3><span class="text-copperlight font-semibold">4,50€</span></div>
-          <p class="text-mute text-sm mt-2">Hierbabuena fresca y un toque de jengibre.</p>
+        <div class="card-dish border border-line rounded-xl overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1621263764928-df1444c5e859?q=80&w=900&auto=format&fit=crop" alt="Limonada de la casa" class="h-44 w-full object-cover">
+          <div class="p-6">
+            <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Limonada de la casa</h3><span class="text-copperlight font-semibold">4,50€</span></div>
+            <p class="text-mute text-sm mt-2">Hierbabuena fresca y un toque de jengibre.</p>
+          </div>
         </div>
-        <div class="card-dish border border-line rounded-xl p-6">
-          <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Café e infusiones</h3><span class="text-copperlight font-semibold">2,20€</span></div>
-          <p class="text-mute text-sm mt-2">Tueste natural, selección de infusiones premium.</p>
+        <div class="card-dish border border-line rounded-xl overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=900&auto=format&fit=crop" alt="Café e infusiones" class="h-44 w-full object-cover">
+          <div class="p-6">
+            <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Café e infusiones</h3><span class="text-copperlight font-semibold">2,20€</span></div>
+            <p class="text-mute text-sm mt-2">Tueste natural, selección de infusiones premium.</p>
+          </div>
+        </div>
+        <div class="card-dish border border-line rounded-xl overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1581636625402-29b2a704ef13?q=80&w=900&auto=format&fit=crop" alt="Coca-Cola" class="h-44 w-full object-cover">
+          <div class="p-6">
+            <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Coca-Cola</h3><span class="text-copperlight font-semibold">2,80€</span></div>
+            <p class="text-mute text-sm mt-2">Lata 33cl, bien fría.</p>
+          </div>
+        </div>
+        <div class="card-dish border border-line rounded-xl overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1581636625402-29b2a704ef13?q=80&w=900&auto=format&fit=crop" alt="Coca-Cola Zero" class="h-44 w-full object-cover">
+          <div class="p-6">
+            <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Coca-Cola Zero</h3><span class="text-copperlight font-semibold">2,80€</span></div>
+            <p class="text-mute text-sm mt-2">Lata 33cl, sin azúcar.</p>
+          </div>
+        </div>
+        <div class="card-dish border border-line rounded-xl overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1622543925917-763c34d1a86e?q=80&w=900&auto=format&fit=crop" alt="Fanta Naranja / Limón" class="h-44 w-full object-cover">
+          <div class="p-6">
+            <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Fanta Naranja / Limón</h3><span class="text-copperlight font-semibold">2,80€</span></div>
+            <p class="text-mute text-sm mt-2">Lata 33cl.</p>
+          </div>
+        </div>
+        <div class="card-dish border border-line rounded-xl overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1625772299848-391b6a87d7b3?q=80&w=900&auto=format&fit=crop" alt="Sprite" class="h-44 w-full object-cover">
+          <div class="p-6">
+            <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Sprite</h3><span class="text-copperlight font-semibold">2,80€</span></div>
+            <p class="text-mute text-sm mt-2">Lata 33cl.</p>
+          </div>
+        </div>
+        <div class="card-dish border border-line rounded-xl overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1554866585-cd94860890b7?q=80&w=900&auto=format&fit=crop" alt="Aquarius" class="h-44 w-full object-cover">
+          <div class="p-6">
+            <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Aquarius Naranja / Limón</h3><span class="text-copperlight font-semibold">2,80€</span></div>
+            <p class="text-mute text-sm mt-2">Lata 33cl.</p>
+          </div>
+        </div>
+        <div class="card-dish border border-line rounded-xl overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1437418747212-8d9709afab22?q=80&w=900&auto=format&fit=crop" alt="Agua mineral" class="h-44 w-full object-cover">
+          <div class="p-6">
+            <div class="flex justify-between items-baseline gap-3"><h3 class="font-display text-xl">Agua mineral</h3><span class="text-copperlight font-semibold">2,00€</span></div>
+            <p class="text-mute text-sm mt-2">Con o sin gas, 50cl.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -438,22 +586,39 @@ const P1_TOTAL_MESAS = 20;
         <label for="personas" class="block text-xs eyebrow uppercase text-mute mb-2">Número de personas</label>
         <select id="personas" name="personas"
           class="field-input w-full bg-ink/60 border border-line rounded-lg px-4 py-3.5 text-cream">
-          <option value="">Selecciona</option>
-          <option>1 persona</option>
-          <option>2 personas</option>
-          <option>3 personas</option>
-          <option>4 personas</option>
-          <option>5 personas</option>
-          <option>6 personas</option>
-          <option>7 o más (llámanos)</option>
+          <option value="" style="background-color:#19120D; color:#C9854B;">Selecciona</option>
+          <option style="background-color:#19120D; color:#C9854B;">1 persona</option>
+          <option style="background-color:#19120D; color:#C9854B;">2 personas</option>
+          <option style="background-color:#19120D; color:#C9854B;">3 personas</option>
+          <option style="background-color:#19120D; color:#C9854B;">4 personas</option>
+          <option style="background-color:#19120D; color:#C9854B;">5 personas</option>
+          <option style="background-color:#19120D; color:#C9854B;">6 personas</option>
+          <option style="background-color:#19120D; color:#C9854B;">7 o más (llámanos)</option>
         </select>
         <p class="error-msg hidden text-red-400 text-xs mt-1.5"></p>
       </div>
 
-      <div>
-        <label for="fecha" class="block text-xs eyebrow uppercase text-mute mb-2">Fecha</label>
-        <input type="date" id="fecha" name="fecha"
-          class="field-input w-full bg-ink/60 border border-line rounded-lg px-4 py-3.5 text-cream">
+      <div class="relative">
+        <label for="fechaDisplay" class="block text-xs eyebrow uppercase text-mute mb-2">Fecha</label>
+        <button type="button" id="fechaDisplay"
+          class="field-input w-full bg-ink/60 border border-line rounded-lg px-4 py-3.5 text-cream text-left flex items-center justify-between">
+          <span id="fechaDisplayText">Selecciona una fecha</span>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-mute" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+          </svg>
+        </button>
+        <input type="hidden" id="fecha" name="fecha">
+        <div id="calendarPopup" class="hidden absolute z-20 mt-2 bg-surface border border-copper/40 rounded-2xl p-4 shadow-2xl w-72">
+          <div class="flex items-center justify-between mb-3">
+            <button type="button" id="calPrev" class="h-8 w-8 rounded-full border border-line flex items-center justify-center hover:border-copper hover:text-copperlight transition">‹</button>
+            <span id="calLabel" class="font-display text-sm text-cream"></span>
+            <button type="button" id="calNext" class="h-8 w-8 rounded-full border border-line flex items-center justify-center hover:border-copper hover:text-copperlight transition">›</button>
+          </div>
+          <div class="grid grid-cols-7 gap-1 text-center text-[10px] text-mute mb-1">
+            <span>L</span><span>M</span><span>X</span><span>J</span><span>V</span><span>S</span><span>D</span>
+          </div>
+          <div id="calGrid" class="grid grid-cols-7 gap-1 text-center text-sm"></div>
+        </div>
         <p class="error-msg hidden text-red-400 text-xs mt-1.5"></p>
       </div>
 
@@ -524,11 +689,8 @@ const P1_TOTAL_MESAS = 20;
       <h4 class="text-xs eyebrow uppercase text-copperlight mb-4">Contacto</h4>
       <a href="tel:677400400" class="text-mute text-sm hover:text-copperlight transition">677 40 04 00</a>
       <div class="flex gap-4 mt-5">
-        <a href="#" aria-label="Instagram" class="h-9 w-9 rounded-full border border-line flex items-center justify-center hover:border-copper hover:text-copperlight transition">
+        <a href="https://www.instagram.com/pr1meraplanta/" target="_blank" rel="noopener" aria-label="Instagram" class="h-9 w-9 rounded-full border border-line flex items-center justify-center hover:border-copper hover:text-copperlight transition">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.58.01 4.85.07 1.17.05 1.97.24 2.43.4a4.9 4.9 0 011.77 1.15 4.9 4.9 0 011.15 1.77c.16.46.35 1.26.4 2.43.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.24 1.97-.4 2.43a4.9 4.9 0 01-1.15 1.77 4.9 4.9 0 01-1.77 1.15c-.46.16-1.26.35-2.43.4-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.97-.24-2.43-.4a4.9 4.9 0 01-1.77-1.15 4.9 4.9 0 01-1.15-1.77c-.16-.46-.35-1.26-.4-2.43C2.21 15.58 2.2 15.2 2.2 12s.01-3.58.07-4.85c.05-1.17.24-1.97.4-2.43a4.9 4.9 0 011.15-1.77A4.9 4.9 0 015.6 1.8c.46-.16 1.26-.35 2.43-.4C9.3 1.34 9.67 1.33 12.87 1.33z"/></svg>
-        </a>
-        <a href="#" aria-label="Facebook" class="h-9 w-9 rounded-full border border-line flex items-center justify-center hover:border-copper hover:text-copperlight transition">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5 3.66 9.15 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.5 1.49-3.89 3.78-3.89 1.1 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.45 2.91h-2.33V22c4.78-.79 8.44-4.94 8.44-9.94z"/></svg>
         </a>
       </div>
     </div>
@@ -591,13 +753,93 @@ const P1_TOTAL_MESAS = 20;
 
   // ---------- Fecha mínima = hoy, y la dejamos preseleccionada ----------
   const fechaInput = document.getElementById('fecha');
+  const fechaDisplay = document.getElementById('fechaDisplay');
+  const fechaDisplayText = document.getElementById('fechaDisplayText');
+  const calendarPopup = document.getElementById('calendarPopup');
+  const calGrid = document.getElementById('calGrid');
+  const calLabel = document.getElementById('calLabel');
+  const calPrev = document.getElementById('calPrev');
+  const calNext = document.getElementById('calNext');
   const horaInput = document.getElementById('hora'); // hidden input con el valor real
   const turnoGrid = document.getElementById('turnoGrid');
   const turnoWrap = document.getElementById('turnoWrap');
   const aforoNota = document.getElementById('aforoNota');
   const today = new Date().toISOString().split('T')[0];
-  fechaInput.setAttribute('min', today);
-  fechaInput.value = today;
+
+  const MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  const todayDate = new Date();
+  let calViewYear = todayDate.getFullYear();
+  let calViewMonth = todayDate.getMonth(); // 0-indexed
+
+  function fechaFormateadaCorta(isoStr) {
+    const d = new Date(isoStr + 'T00:00:00');
+    return d.toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+  }
+
+  function setFecha(isoStr) {
+    fechaInput.value = isoStr;
+    fechaDisplayText.textContent = fechaFormateadaCorta(isoStr);
+    pintarTurnos();
+  }
+
+  function renderCalendario() {
+    calLabel.textContent = `${MESES[calViewMonth]} ${calViewYear}`;
+    calGrid.innerHTML = '';
+
+    const firstOfMonth = new Date(calViewYear, calViewMonth, 1);
+    const startOffset = (firstOfMonth.getDay() + 6) % 7; // lunes=0
+    const daysInMonth = new Date(calViewYear, calViewMonth + 1, 0).getDate();
+
+    for (let i = 0; i < startOffset; i++) {
+      calGrid.appendChild(document.createElement('span'));
+    }
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const iso = `${calViewYear}-${String(calViewMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.textContent = String(day);
+      const isPast = iso < today;
+      const isSelected = iso === fechaInput.value;
+      btn.disabled = isPast;
+      btn.className = 'h-8 w-8 rounded-full flex items-center justify-center transition ' +
+        (isPast ? 'text-mute/20 cursor-not-allowed' :
+         isSelected ? 'bg-copper text-ink font-semibold' :
+         'text-cream hover:bg-copper/20');
+      if (!isPast) {
+        btn.addEventListener('click', () => {
+          setFecha(iso);
+          calendarPopup.classList.add('hidden');
+          renderCalendario();
+        });
+      }
+      calGrid.appendChild(btn);
+    }
+  }
+
+  calPrev.addEventListener('click', () => {
+    calViewMonth--;
+    if (calViewMonth < 0) { calViewMonth = 11; calViewYear--; }
+    renderCalendario();
+  });
+  calNext.addEventListener('click', () => {
+    calViewMonth++;
+    if (calViewMonth > 11) { calViewMonth = 0; calViewYear++; }
+    renderCalendario();
+  });
+
+  fechaDisplay.addEventListener('click', () => {
+    calendarPopup.classList.toggle('hidden');
+    renderCalendario();
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!calendarPopup.contains(e.target) && e.target !== fechaDisplay && !fechaDisplay.contains(e.target)) {
+      calendarPopup.classList.add('hidden');
+    }
+  });
+
+  setFecha(today);
 
   const P1_TOTAL_MESAS = 20;
 
@@ -643,8 +885,6 @@ const P1_TOTAL_MESAS = 20;
 
     aforoNota.textContent = `Aforo total: ${P1_TOTAL_MESAS} mesas por turno · se actualiza al confirmar cada reserva.`;
   }
-  fechaInput.addEventListener('change', pintarTurnos);
-  pintarTurnos();
 
   // ---------- Validación y envío del formulario ----------
   const form = document.getElementById('reservaForm');
@@ -761,8 +1001,7 @@ const P1_TOTAL_MESAS = 20;
     requestAnimationFrame(() => modal.classList.remove('opacity-0'));
 
     form.reset();
-    fechaInput.value = today;
-    pintarTurnos();
+    setFecha(today);
   });
 
 

@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(sleep 4; cat /tmp/astro_dev9.log)",
+      "Read(//tmp/**)",
+      "Bash(curl -s -X POST https://api.resend.com/emails -H 'Authorization: Bearer re_8CQaYvcU_LB1JmA71RdracCPWsvA9kzFX' -H 'Content-Type: application/json' -d '{ *)",
+      "Bash(npm uninstall *)",
+      "Bash(sleep 5; cat /tmp/astro_dev_final.log)"
+    ]
+  }
+}

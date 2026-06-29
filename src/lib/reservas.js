@@ -12,15 +12,15 @@ export function reservasDelDia(fecha) {
   ).all(fecha);
 }
 
-export function ocupadasEnSlot(fecha, hora) {
+export function ocupadasEnSlot(fecha, hora, excluirId = null) {
   const row = db.prepare(
-    `SELECT COUNT(*) AS n FROM reservas WHERE fecha = ? AND hora = ? AND estado != 'cancelada'`
-  ).get(fecha, hora);
+    `SELECT COUNT(*) AS n FROM reservas WHERE fecha = ? AND hora = ? AND estado != 'cancelada' AND id != ?`
+  ).get(fecha, hora, excluirId || '');
   return row.n;
 }
 
-export function libresEnSlot(fecha, hora) {
-  return Math.max(0, P1_TOTAL_MESAS - ocupadasEnSlot(fecha, hora));
+export function libresEnSlot(fecha, hora, excluirId = null) {
+  return Math.max(0, P1_TOTAL_MESAS - ocupadasEnSlot(fecha, hora, excluirId));
 }
 
 export function slotsConDisponibilidad(fecha) {
@@ -50,6 +50,42 @@ export function crearReserva({ nombre, telefono, email, fecha, hora, personas })
      VALUES (@id, @nombre, @telefono, @email, @fecha, @hora, @personas, @estado, @creada)`
   ).run(reserva);
   return { ok: true, reserva };
+}
+
+export function conteoPorDiaEnMes(anio, mes) {
+  const prefijo = `${anio}-${String(mes).padStart(2, '0')}`;
+  const rows = db.prepare(
+    `SELECT fecha, COUNT(*) AS n FROM reservas WHERE fecha LIKE ? AND estado != 'cancelada' GROUP BY fecha`
+  ).all(prefijo + '%');
+  const conteo = {};
+  rows.forEach((r) => { conteo[r.fecha] = r.n; });
+  return conteo;
+}
+
+export function obtenerReserva(id) {
+  return db.prepare(`SELECT * FROM reservas WHERE id = ?`).get(id);
+}
+
+export function editarReserva(id, { fecha, hora, personas }) {
+  const reserva = obtenerReserva(id);
+  if (!reserva) {
+    return { ok: false, motivo: 'La reserva no existe.' };
+  }
+
+  const nuevaFecha = fecha || reserva.fecha;
+  const nuevaHora = hora || reserva.hora;
+  const nuevasPersonas = personas || reserva.personas;
+
+  const cambiaTurno = nuevaFecha !== reserva.fecha || nuevaHora !== reserva.hora;
+  if (cambiaTurno && libresEnSlot(nuevaFecha, nuevaHora, id) <= 0) {
+    return { ok: false, motivo: 'Ese turno ya está completo. Elige otra hora.' };
+  }
+
+  db.prepare(
+    `UPDATE reservas SET fecha = ?, hora = ?, personas = ? WHERE id = ?`
+  ).run(nuevaFecha, nuevaHora, nuevasPersonas, id);
+
+  return { ok: true, reserva: obtenerReserva(id) };
 }
 
 export function cancelarReserva(id) {
