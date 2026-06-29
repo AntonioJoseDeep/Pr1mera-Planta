@@ -5,7 +5,11 @@
       "Read(//tmp/**)",
       "Bash(curl -s -X POST https://api.resend.com/emails -H 'Authorization: Bearer re_8CQaYvcU_LB1JmA71RdracCPWsvA9kzFX' -H 'Content-Type: application/json' -d '{ *)",
       "Bash(npm uninstall *)",
-      "Bash(sleep 5; cat /tmp/astro_dev_final.log)"
+      "Bash(sleep 5; cat /tmp/astro_dev_final.log)",
+      "PowerShell(irm get.tur.so/install.ps1 | iex)",
+      "Bash(sleep 5; cat /tmp/turso_real.log)",
+      "Bash(curl -s -X POST http://localhost:4321/api/reservas -H \"Content-Type: application/json\" -H \"Origin: http://localhost:4321\" -d '{\"nombre\":\"Turso Real Test\",\"telefono\":\"611222333\",\"email\":\"turso@test.com\",\"fecha\":\"2026-08-01\",\"hora\":\"21:00\",\"personas\":\"2 personas\"}')",
+      "Bash(curl -s \"http://localhost:4321/api/reservas?fecha=2026-08-01\")"
     ]
   }
 }
