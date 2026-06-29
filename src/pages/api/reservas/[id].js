@@ -12,7 +12,7 @@ export async function PATCH({ params, request, cookies }) {
   const body = await request.json().catch(() => ({}));
 
   if (body.action === 'editar') {
-    const resultado = editarReserva(params.id, {
+    const resultado = await editarReserva(params.id, {
       fecha: body.fecha,
       hora: body.hora,
       personas: body.personas,
@@ -26,6 +26,6 @@ export async function PATCH({ params, request, cookies }) {
     });
   }
 
-  cancelarReserva(params.id);
+  await cancelarReserva(params.id);
   return new Response(JSON.stringify({ ok: true }), { headers: { 'Content-Type': 'application/json' } });
 }

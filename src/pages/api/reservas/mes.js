@@ -13,7 +13,7 @@ export async function GET({ url, cookies }) {
   if (!anio || !mes) {
     return new Response(JSON.stringify({ error: 'Faltan los parámetros anio y mes' }), { status: 400 });
   }
-  return new Response(JSON.stringify({ conteo: conteoPorDiaEnMes(anio, mes) }), {
+  return new Response(JSON.stringify({ conteo: await conteoPorDiaEnMes(anio, mes) }), {
     headers: { 'Content-Type': 'application/json' },
   });
 }

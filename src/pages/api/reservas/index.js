@@ -10,13 +10,13 @@ export async function GET({ url, cookies }) {
     return new Response(JSON.stringify({ error: 'Falta el parámetro fecha' }), { status: 400 });
   }
 
-  const slots = slotsConDisponibilidad(fecha);
+  const slots = await slotsConDisponibilidad(fecha);
   if (!isAuthenticated(cookies)) {
     return new Response(JSON.stringify({ slots }), { headers: { 'Content-Type': 'application/json' } });
   }
 
   return new Response(
-    JSON.stringify({ reservas: reservasDelDia(fecha), slots }),
+    JSON.stringify({ reservas: await reservasDelDia(fecha), slots }),
     { headers: { 'Content-Type': 'application/json' } }
   );
 }
@@ -39,7 +39,7 @@ export async function POST({ request }) {
     return new Response(JSON.stringify({ ok: false, motivo: 'Faltan datos de la reserva.' }), { status: 400 });
   }
 
-  const resultado = crearReserva({
+  const resultado = await crearReserva({
     nombre: nombre.trim(),
     telefono: phoneDigits,
     email: email.trim(),

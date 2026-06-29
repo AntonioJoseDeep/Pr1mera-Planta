@@ -6,32 +6,37 @@ export const P1_SLOTS = ['20:00', '20:30', '21:00', '21:30', '22:00', '22:30', '
 export const P1_DIRECCION = 'C.C. Green Park Altorreal, Av. del Golf, 100, 30506 Molina de Segura, Murcia';
 export const P1_TELEFONO = '677400400';
 
-export function reservasDelDia(fecha) {
-  return db.prepare(
-    `SELECT * FROM reservas WHERE fecha = ? AND estado != 'cancelada' ORDER BY hora ASC`
-  ).all(fecha);
-}
-
-export function ocupadasEnSlot(fecha, hora, excluirId = null) {
-  const row = db.prepare(
-    `SELECT COUNT(*) AS n FROM reservas WHERE fecha = ? AND hora = ? AND estado != 'cancelada' AND id != ?`
-  ).get(fecha, hora, excluirId || '');
-  return row.n;
-}
-
-export function libresEnSlot(fecha, hora, excluirId = null) {
-  return Math.max(0, P1_TOTAL_MESAS - ocupadasEnSlot(fecha, hora, excluirId));
-}
-
-export function slotsConDisponibilidad(fecha) {
-  return P1_SLOTS.map((hora) => {
-    const libres = libresEnSlot(fecha, hora);
-    return { hora, libres, completo: libres === 0 };
+export async function reservasDelDia(fecha) {
+  const { rows } = await db.execute({
+    sql: `SELECT * FROM reservas WHERE fecha = ? AND estado != 'cancelada' ORDER BY hora ASC`,
+    args: [fecha],
   });
+  return rows;
 }
 
-export function crearReserva({ nombre, telefono, email, fecha, hora, personas }) {
-  if (libresEnSlot(fecha, hora) <= 0) {
+export async function ocupadasEnSlot(fecha, hora, excluirId = null) {
+  const { rows } = await db.execute({
+    sql: `SELECT COUNT(*) AS n FROM reservas WHERE fecha = ? AND hora = ? AND estado != 'cancelada' AND id != ?`,
+    args: [fecha, hora, excluirId || ''],
+  });
+  return Number(rows[0].n);
+}
+
+export async function libresEnSlot(fecha, hora, excluirId = null) {
+  return Math.max(0, P1_TOTAL_MESAS - (await ocupadasEnSlot(fecha, hora, excluirId)));
+}
+
+export async function slotsConDisponibilidad(fecha) {
+  return Promise.all(
+    P1_SLOTS.map(async (hora) => {
+      const libres = await libresEnSlot(fecha, hora);
+      return { hora, libres, completo: libres === 0 };
+    })
+  );
+}
+
+export async function crearReserva({ nombre, telefono, email, fecha, hora, personas }) {
+  if ((await libresEnSlot(fecha, hora)) <= 0) {
     return { ok: false, motivo: 'Ese turno se ha completado mientras rellenabas el formulario. Elige otra hora.' };
   }
   const reserva = {
@@ -45,29 +50,32 @@ export function crearReserva({ nombre, telefono, email, fecha, hora, personas })
     estado: 'confirmada',
     creada: new Date().toISOString(),
   };
-  db.prepare(
-    `INSERT INTO reservas (id, nombre, telefono, email, fecha, hora, personas, estado, creada)
-     VALUES (@id, @nombre, @telefono, @email, @fecha, @hora, @personas, @estado, @creada)`
-  ).run(reserva);
+  await db.execute({
+    sql: `INSERT INTO reservas (id, nombre, telefono, email, fecha, hora, personas, estado, creada)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    args: [reserva.id, reserva.nombre, reserva.telefono, reserva.email, reserva.fecha, reserva.hora, reserva.personas, reserva.estado, reserva.creada],
+  });
   return { ok: true, reserva };
 }
 
-export function conteoPorDiaEnMes(anio, mes) {
+export async function conteoPorDiaEnMes(anio, mes) {
   const prefijo = `${anio}-${String(mes).padStart(2, '0')}`;
-  const rows = db.prepare(
-    `SELECT fecha, COUNT(*) AS n FROM reservas WHERE fecha LIKE ? AND estado != 'cancelada' GROUP BY fecha`
-  ).all(prefijo + '%');
+  const { rows } = await db.execute({
+    sql: `SELECT fecha, COUNT(*) AS n FROM reservas WHERE fecha LIKE ? AND estado != 'cancelada' GROUP BY fecha`,
+    args: [prefijo + '%'],
+  });
   const conteo = {};
-  rows.forEach((r) => { conteo[r.fecha] = r.n; });
+  rows.forEach((r) => { conteo[r.fecha] = Number(r.n); });
   return conteo;
 }
 
-export function obtenerReserva(id) {
-  return db.prepare(`SELECT * FROM reservas WHERE id = ?`).get(id);
+export async function obtenerReserva(id) {
+  const { rows } = await db.execute({ sql: `SELECT * FROM reservas WHERE id = ?`, args: [id] });
+  return rows[0] || null;
 }
 
-export function editarReserva(id, { fecha, hora, personas }) {
-  const reserva = obtenerReserva(id);
+export async function editarReserva(id, { fecha, hora, personas }) {
+  const reserva = await obtenerReserva(id);
   if (!reserva) {
     return { ok: false, motivo: 'La reserva no existe.' };
   }
@@ -77,19 +85,20 @@ export function editarReserva(id, { fecha, hora, personas }) {
   const nuevasPersonas = personas || reserva.personas;
 
   const cambiaTurno = nuevaFecha !== reserva.fecha || nuevaHora !== reserva.hora;
-  if (cambiaTurno && libresEnSlot(nuevaFecha, nuevaHora, id) <= 0) {
+  if (cambiaTurno && (await libresEnSlot(nuevaFecha, nuevaHora, id)) <= 0) {
     return { ok: false, motivo: 'Ese turno ya está completo. Elige otra hora.' };
   }
 
-  db.prepare(
-    `UPDATE reservas SET fecha = ?, hora = ?, personas = ? WHERE id = ?`
-  ).run(nuevaFecha, nuevaHora, nuevasPersonas, id);
+  await db.execute({
+    sql: `UPDATE reservas SET fecha = ?, hora = ?, personas = ? WHERE id = ?`,
+    args: [nuevaFecha, nuevaHora, nuevasPersonas, id],
+  });
 
-  return { ok: true, reserva: obtenerReserva(id) };
+  return { ok: true, reserva: await obtenerReserva(id) };
 }
 
-export function cancelarReserva(id) {
-  db.prepare(`UPDATE reservas SET estado = 'cancelada' WHERE id = ?`).run(id);
+export async function cancelarReserva(id) {
+  await db.execute({ sql: `UPDATE reservas SET estado = 'cancelada' WHERE id = ?`, args: [id] });
 }
 
 export function linkGoogleCalendar({ nombre, fecha, hora, personas }) {

@@ -1,16 +1,11 @@
-import Database from 'better-sqlite3';
-import { existsSync, mkdirSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
-import path from 'node:path';
+import { createClient } from '@libsql/client';
 
-const root = path.dirname(fileURLToPath(import.meta.url));
-const dataDir = path.join(root, '..', '..', 'data');
-if (!existsSync(dataDir)) mkdirSync(dataDir, { recursive: true });
+const db = createClient({
+  url: import.meta.env.TURSO_DATABASE_URL,
+  authToken: import.meta.env.TURSO_AUTH_TOKEN,
+});
 
-const db = new Database(path.join(dataDir, 'reservas.db'));
-db.pragma('journal_mode = WAL');
-
-db.exec(`
+await db.execute(`
   CREATE TABLE IF NOT EXISTS reservas (
     id TEXT PRIMARY KEY,
     nombre TEXT NOT NULL,
@@ -21,8 +16,8 @@ db.exec(`
     personas TEXT NOT NULL,
     estado TEXT NOT NULL DEFAULT 'confirmada',
     creada TEXT NOT NULL
-  );
-  CREATE INDEX IF NOT EXISTS idx_reservas_fecha ON reservas(fecha);
+  )
 `);
+await db.execute(`CREATE INDEX IF NOT EXISTS idx_reservas_fecha ON reservas(fecha)`);
 
 export default db;
