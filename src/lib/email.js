@@ -1,5 +1,5 @@
-const RESEND_API_KEY = import.meta.env.RESEND_API_KEY;
-const RESEND_FROM = import.meta.env.RESEND_FROM || 'Pr1mera Planta <onboarding@resend.dev>';
+const RESEND_API_KEY = process.env.RESEND_API_KEY || import.meta.env.RESEND_API_KEY;
+const RESEND_FROM = process.env.RESEND_FROM || import.meta.env.RESEND_FROM || 'Pr1mera Planta <onboarding@resend.dev>';
 
 function fechaFormateada(fecha) {
   return new Date(fecha + 'T00:00:00').toLocaleDateString('es-ES', {

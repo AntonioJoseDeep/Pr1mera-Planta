@@ -2,7 +2,7 @@ import { setSessionCookie } from '../../../lib/session.js';
 
 export const prerender = false;
 
-const ADMIN_PASS = import.meta.env.ADMIN_PASS;
+const ADMIN_PASS = process.env.ADMIN_PASS || import.meta.env.ADMIN_PASS;
 
 export async function POST({ request, cookies }) {
   const { pass } = await request.json();

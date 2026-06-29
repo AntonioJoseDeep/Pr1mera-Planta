@@ -1,6 +1,6 @@
 import { createHmac, timingSafeEqual } from 'node:crypto';
 
-const SECRET = import.meta.env.SESSION_SECRET || 'dev-only-insecure-secret';
+const SECRET = process.env.SESSION_SECRET || import.meta.env.SESSION_SECRET || 'dev-only-insecure-secret';
 const COOKIE_NAME = 'p1_admin_session';
 const MAX_AGE_SECONDS = 60 * 60 * 8; // 8 horas
 
