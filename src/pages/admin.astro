@@ -1,3 +1,6 @@
+---
+const P1_TOTAL_MESAS = 20;
+---
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,11 +9,11 @@
 <title>Panel de Reservas · Pr1mera Planta</title>
 <meta name="robots" content="noindex, nofollow">
 
-<script src="https://cdn.tailwindcss.com"></script>
+<script is:inline src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-<script>
+<script is:inline>
   tailwind.config = {
     theme: {
       extend: {
@@ -55,7 +58,7 @@
         <p class="text-mute text-xs mt-0.5">Pr1mera Planta · Green Park Altorreal</p>
       </div>
       <div class="flex items-center gap-4">
-        <a href="index.html" class="text-mute text-sm hover:text-copperlight transition">Ver web</a>
+        <a href="/" class="text-mute text-sm hover:text-copperlight transition">Ver web</a>
         <button id="logoutBtn" class="text-sm border border-line rounded-full px-4 py-2 hover:border-copper hover:text-copperlight transition">Salir</button>
       </div>
     </div>
@@ -64,7 +67,7 @@
   <main class="max-w-6xl mx-auto px-6 py-10">
 
     <div class="bg-amber-200/10 border border-amber-300/30 text-amber-100 text-sm rounded-xl px-5 py-4 mb-8 leading-relaxed">
-      <strong>Modo demostración:</strong> estas reservas se guardan solo en este navegador (localStorage), no en un servidor compartido. Para ver aquí las reservas que hagan los clientes desde sus propios móviles hace falta conectar el sitio a una base de datos real.
+      <strong>Conectado al servidor:</strong> estas reservas se guardan en una base de datos compartida. Verás aquí las reservas hechas por los clientes desde cualquier dispositivo.
     </div>
 
     <div class="flex flex-wrap items-end gap-4 mb-10">
@@ -142,118 +145,7 @@
   </div>
 </div>
 
-<script>
-/* === Motor de reservas (antes en reservas.js, ahora integrado aqui para que funcione sin depender de archivos externos) === */
-/* =========================================================
-   Pr1mera Planta — Motor de reservas (DEMO)
-   ---------------------------------------------------------
-   Esto es un PROTOTIPO funcional que guarda las reservas en
-   localStorage (solo en este navegador). Sirve para validar
-   la experiencia (aforo por turno, panel de admin, enlaces a
-   Google Calendar) antes de construir el backend real.
-
-   Para producción de verdad (que la reserva de un cliente
-   desde su móvil aparezca en el ordenador del restaurante,
-   y que lleguen emails automáticos) hace falta un servidor +
-   base de datos. Ver nota al final del archivo.
-   ========================================================= */
-
-const P1_KEY = 'p1_reservas_demo';
-const P1_TOTAL_MESAS = 20; // aforo total del local por turno
-const P1_DURACION_MESA_MIN = 90; // minutos que se considera ocupada una mesa
-const P1_SLOTS = ['20:00','20:30','21:00','21:30','22:00','22:30','23:00','23:30'];
-
-const P1_DIRECCION = 'C.C. Green Park Altorreal, Av. del Golf, 100, 30506 Molina de Segura, Murcia';
-const P1_TELEFONO = '677400400';
-
-function p1GetReservas() {
-  try {
-    return JSON.parse(localStorage.getItem(P1_KEY) || '[]');
-  } catch (e) {
-    return [];
-  }
-}
-
-function p1SaveReservas(arr) {
-  localStorage.setItem(P1_KEY, JSON.stringify(arr));
-}
-
-function p1ReservasDelDia(fecha) {
-  return p1GetReservas()
-    .filter(r => r.fecha === fecha && r.estado !== 'cancelada')
-    .sort((a, b) => a.hora.localeCompare(b.hora));
-}
-
-function p1OcupadasEnSlot(fecha, hora) {
-  return p1GetReservas().filter(r => r.fecha === fecha && r.hora === hora && r.estado !== 'cancelada').length;
-}
-
-function p1LibresEnSlot(fecha, hora) {
-  return Math.max(0, P1_TOTAL_MESAS - p1OcupadasEnSlot(fecha, hora));
-}
-
-// Devuelve los slots de un día con su disponibilidad, listos para pintar un <select>
-function p1SlotsConDisponibilidad(fecha) {
-  return P1_SLOTS.map(hora => ({
-    hora,
-    libres: p1LibresEnSlot(fecha, hora),
-    completo: p1LibresEnSlot(fecha, hora) === 0
-  }));
-}
-
-// Crea una reserva. Devuelve { ok: true, reserva } o { ok: false, motivo }
-function p1CrearReserva({ nombre, telefono, email, fecha, hora, personas }) {
-  if (p1LibresEnSlot(fecha, hora) <= 0) {
-    return { ok: false, motivo: 'Ese turno se ha completado mientras rellenabas el formulario. Elige otra hora.' };
-  }
-  const reserva = {
-    id: 'r_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
-    nombre,
-    telefono,
-    email: email || '',
-    fecha,
-    hora,
-    personas,
-    estado: 'confirmada',
-    creada: new Date().toISOString()
-  };
-  const all = p1GetReservas();
-  all.push(reserva);
-  p1SaveReservas(all);
-  return { ok: true, reserva };
-}
-
-function p1CancelarReserva(id) {
-  const all = p1GetReservas().map(r => r.id === id ? { ...r, estado: 'cancelada' } : r);
-  p1SaveReservas(all);
-}
-
-function p1EliminarReserva(id) {
-  const all = p1GetReservas().filter(r => r.id !== id);
-  p1SaveReservas(all);
-}
-
-// Construye un link real de "Añadir a Google Calendar" (no requiere API ni login previo)
-function p1LinkGoogleCalendar({ nombre, fecha, hora, personas }) {
-  const [h, m] = hora.split(':').map(Number);
-  const start = new Date(fecha + 'T00:00:00');
-  start.setHours(h, m, 0, 0);
-  const end = new Date(start.getTime() + P1_DURACION_MESA_MIN * 60000);
-
-  const fmt = (d) => d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
-
-  const params = new URLSearchParams({
-    action: 'TEMPLATE',
-    text: 'Reserva Pr1mera Planta — ' + nombre,
-    dates: fmt(start) + '/' + fmt(end),
-    details: 'Reserva para ' + personas + ' en Pr1mera Planta. Teléfono del restaurante: ' + P1_TELEFONO,
-    location: P1_DIRECCION
-  });
-
-  return 'https://calendar.google.com/calendar/render?' + params.toString();
-}
-</script>
-<script>
+<script define:vars={{ P1_TOTAL_MESAS }}>
   // ---------- Acceso ----------
   const ADMIN_PASS = 'altorreal'; // ⚠️ cambia esto antes de usarlo en producción real
   const loginGate = document.getElementById('loginGate');
@@ -303,18 +195,33 @@ function p1LinkGoogleCalendar({ nombre, fecha, hora, personas }) {
   document.getElementById('mananaBtn').addEventListener('click', () => { fechaPanel.value = tomorrowStr(); pintarTodo(); });
   fechaPanel.addEventListener('change', pintarTodo);
 
-  // Si el navegador restaura la página desde su caché (al volver con "atrás"),
-  // nos aseguramos de que la fecha y la lista estén siempre actualizadas.
   window.addEventListener('pageshow', () => {
     if (!fechaPanel.value) fechaPanel.value = todayStr;
     if (sessionStorage.getItem('p1_admin') === '1') pintarTodo();
   });
 
+  // ---------- Helper para construir el link de Google Calendar ----------
+  function linkGoogleCalendar(r) {
+    const [h, m] = r.hora.split(':').map(Number);
+    const start = new Date(r.fecha + 'T00:00:00');
+    start.setHours(h, m, 0, 0);
+    const end = new Date(start.getTime() + 90 * 60000);
+    const fmt = (d) => d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+    const params = new URLSearchParams({
+      action: 'TEMPLATE',
+      text: 'Reserva Pr1mera Planta — ' + r.nombre,
+      dates: fmt(start) + '/' + fmt(end),
+      details: 'Reserva para ' + r.personas + ' en Pr1mera Planta. Teléfono del restaurante: 677400400',
+      location: 'C.C. Green Park Altorreal, Av. del Golf, 100, 30506 Molina de Segura, Murcia'
+    });
+    return 'https://calendar.google.com/calendar/render?' + params.toString();
+  }
+
   // ---------- Pintar aforo por turno ----------
-  function pintarAforo(fecha) {
+  function pintarAforo(slots) {
     const grid = document.getElementById('aforoGrid');
     grid.innerHTML = '';
-    p1SlotsConDisponibilidad(fecha).forEach(s => {
+    slots.forEach(s => {
       const ocupadas = P1_TOTAL_MESAS - s.libres;
       const pct = Math.round((ocupadas / P1_TOTAL_MESAS) * 100);
       const div = document.createElement('div');
@@ -332,10 +239,11 @@ function p1LinkGoogleCalendar({ nombre, fecha, hora, personas }) {
   }
 
   // ---------- Pintar lista de reservas ----------
-  function pintarLista(fecha) {
+  let reservasActuales = [];
+
+  function pintarLista(reservas) {
     const cont = document.getElementById('listaReservas');
     const vacioMsg = document.getElementById('vacioMsg');
-    const reservas = p1ReservasDelDia(fecha);
     cont.innerHTML = '';
 
     document.getElementById('totalDia').textContent = reservas.length;
@@ -376,9 +284,9 @@ function p1LinkGoogleCalendar({ nombre, fecha, hora, personas }) {
     });
 
     document.querySelectorAll('.cancelarBtn').forEach(btn => {
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', async () => {
         if (confirm('¿Cancelar esta reserva? Se liberará la mesa en ese turno.')) {
-          p1CancelarReserva(btn.dataset.id);
+          await fetch('/api/reservas/' + btn.dataset.id, { method: 'PATCH' });
           pintarTodo();
         }
       });
@@ -406,7 +314,7 @@ function p1LinkGoogleCalendar({ nombre, fecha, hora, personas }) {
     document.getElementById('detalleCreada').textContent = new Date(r.creada).toLocaleString('es-ES');
 
     document.getElementById('detalleLlamar').href = 'tel:' + r.telefono;
-    document.getElementById('detalleCalendar').href = p1LinkGoogleCalendar(r);
+    document.getElementById('detalleCalendar').href = linkGoogleCalendar(r);
 
     detalleModal.classList.remove('hidden');
     detalleModal.classList.add('flex');
@@ -426,10 +334,13 @@ function p1LinkGoogleCalendar({ nombre, fecha, hora, personas }) {
     if (e.target === detalleModal) cerrarDetalleModal();
   });
 
-  function pintarTodo() {
+  async function pintarTodo() {
     const fecha = fechaPanel.value;
-    pintarAforo(fecha);
-    pintarLista(fecha);
+    const res = await fetch('/api/reservas?fecha=' + encodeURIComponent(fecha));
+    const data = await res.json();
+    reservasActuales = data.reservas;
+    pintarAforo(data.slots);
+    pintarLista(data.reservas);
   }
 </script>
 </body>

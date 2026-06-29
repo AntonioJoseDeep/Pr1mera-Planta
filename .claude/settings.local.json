@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx astro *)",
+      "Bash(npm install *)",
+      "Bash(node -e \"const db = require\\('better-sqlite3'\\)\\(':memory:'\\); db.exec\\('CREATE TABLE t\\(x\\)'\\); console.log\\('OK'\\)\")",
+      "Read(//tmp/**)",
+      "Bash(curl -s -o /dev/null -w \"INDEX:%{http_code}\\\\n\" http://localhost:4321/)",
+      "Bash(curl -s -o /dev/null -w \"ADMIN:%{http_code}\\\\n\" http://localhost:4321/admin)",
+      "Bash(curl -s -X PATCH \"http://localhost:4322/api/reservas/r_1782716400606_eo3xm\")",
+      "Bash(curl -s http://localhost:4322/api/reservas?fecha=__TRACKED_VAR__)",
+      "Bash(kill %1 %2)",
+      "Bash(pkill -f \"astro dev\")"
+    ]
+  }
+}
