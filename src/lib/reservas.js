@@ -1,4 +1,4 @@
-import db from './db.js';
+import { execute } from './db.js';
 
 export const P1_TOTAL_MESAS = 20;
 export const P1_DURACION_MESA_MIN = 90;
@@ -7,7 +7,7 @@ export const P1_DIRECCION = 'C.C. Green Park Altorreal, Av. del Golf, 100, 30506
 export const P1_TELEFONO = '677400400';
 
 export async function reservasDelDia(fecha) {
-  const { rows } = await db.execute({
+  const { rows } = await execute({
     sql: `SELECT * FROM reservas WHERE fecha = ? AND estado != 'cancelada' ORDER BY hora ASC`,
     args: [fecha],
   });
@@ -15,7 +15,7 @@ export async function reservasDelDia(fecha) {
 }
 
 export async function ocupadasEnSlot(fecha, hora, excluirId = null) {
-  const { rows } = await db.execute({
+  const { rows } = await execute({
     sql: `SELECT COUNT(*) AS n FROM reservas WHERE fecha = ? AND hora = ? AND estado != 'cancelada' AND id != ?`,
     args: [fecha, hora, excluirId || ''],
   });
@@ -50,7 +50,7 @@ export async function crearReserva({ nombre, telefono, email, fecha, hora, perso
     estado: 'confirmada',
     creada: new Date().toISOString(),
   };
-  await db.execute({
+  await execute({
     sql: `INSERT INTO reservas (id, nombre, telefono, email, fecha, hora, personas, estado, creada)
           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     args: [reserva.id, reserva.nombre, reserva.telefono, reserva.email, reserva.fecha, reserva.hora, reserva.personas, reserva.estado, reserva.creada],
@@ -60,7 +60,7 @@ export async function crearReserva({ nombre, telefono, email, fecha, hora, perso
 
 export async function conteoPorDiaEnMes(anio, mes) {
   const prefijo = `${anio}-${String(mes).padStart(2, '0')}`;
-  const { rows } = await db.execute({
+  const { rows } = await execute({
     sql: `SELECT fecha, COUNT(*) AS n FROM reservas WHERE fecha LIKE ? AND estado != 'cancelada' GROUP BY fecha`,
     args: [prefijo + '%'],
   });
@@ -70,7 +70,7 @@ export async function conteoPorDiaEnMes(anio, mes) {
 }
 
 export async function obtenerReserva(id) {
-  const { rows } = await db.execute({ sql: `SELECT * FROM reservas WHERE id = ?`, args: [id] });
+  const { rows } = await execute({ sql: `SELECT * FROM reservas WHERE id = ?`, args: [id] });
   return rows[0] || null;
 }
 
@@ -89,7 +89,7 @@ export async function editarReserva(id, { fecha, hora, personas }) {
     return { ok: false, motivo: 'Ese turno ya está completo. Elige otra hora.' };
   }
 
-  await db.execute({
+  await execute({
     sql: `UPDATE reservas SET fecha = ?, hora = ?, personas = ? WHERE id = ?`,
     args: [nuevaFecha, nuevaHora, nuevasPersonas, id],
   });
@@ -98,7 +98,7 @@ export async function editarReserva(id, { fecha, hora, personas }) {
 }
 
 export async function cancelarReserva(id) {
-  await db.execute({ sql: `UPDATE reservas SET estado = 'cancelada' WHERE id = ?`, args: [id] });
+  await execute({ sql: `UPDATE reservas SET estado = 'cancelada' WHERE id = ?`, args: [id] });
 }
 
 export function linkGoogleCalendar({ nombre, fecha, hora, personas }) {
